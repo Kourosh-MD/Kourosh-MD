@@ -16,5 +16,15 @@
     "ML/DL · 10%",
     "Linux",
     "Cybersecurity · 43%"
+  ],
+  "proficiencies": [
+    {"name": "Java", "percent": 78},
+    {"name": "JavaScript", "percent": 86},
+    {"name": "Python", "percent": 89},
+    {"name": "Node.js", "percent": 82},
+    {"name": "Playwright", "percent": 74},
+    {"name": "ML/DL", "percent": 10},
+    {"name": "Linux", "percent": 88},
+    {"name": "Cybersecurity", "percent": 43}
   ]
 }
