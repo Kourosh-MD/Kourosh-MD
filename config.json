@@ -1,0 +1,20 @@
+{
+  "username": "Kourosh-MD",
+  "name": "Kourosh",
+  "wordmark": "KOUROSH",
+  "role": "Developer",
+  "location": "Earth",
+  "status": "Coding · Learning",
+  "website": "https://github.com/Kourosh-MD",
+  "portrait_ascii": "assets/portrait.txt",
+  "skills": [
+    "Java",
+    "JavaScript",
+    "Python",
+    "Node.js",
+    "Playwright",
+    "ML/DL · 10%",
+    "Linux",
+    "Cybersecurity · 43%"
+  ]
+}
