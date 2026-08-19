@@ -3,7 +3,7 @@ name: Update Aqua Launch
 on:
   workflow_dispatch:
   schedule:
-    - cron: "43 5 * * *"
+    - cron: "43 */6 * * *"
 
 permissions:
   contents: write
