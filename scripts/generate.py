@@ -89,7 +89,7 @@ def load_config() -> dict:
 
 def request_json(url: str, *, payload: dict | None = None) -> object:
     headers = {"Accept": "application/vnd.github+json", "User-Agent": "aqua-launch-profile"}
-    token = os.environ.get("GITHUB_TOKEN")
+    token = os.environ.get("PROFILE_GITHUB_TOKEN") or os.environ.get("GITHUB_TOKEN")
     if token:
         headers["Authorization"] = f"Bearer {token}"
     data = None
@@ -131,26 +131,38 @@ def profile_data(username: str) -> dict:
 
 
 def contributions_graphql(username: str) -> dict | None:
-    if not os.environ.get("GITHUB_TOKEN"):
+    if not (os.environ.get("PROFILE_GITHUB_TOKEN") or os.environ.get("GITHUB_TOKEN")):
         return None
-    query = """query($login:String!){user(login:$login){contributionsCollection{contributionCalendar{totalContributions weeks{contributionDays{date contributionCount contributionLevel}}}}}}"""
-    result = request_json("https://api.github.com/graphql", payload={"query": query, "variables": {"login": username}})
+    year = date.today().year
+    start = f"{year}-01-01T00:00:00Z"
+    end = f"{(date.today() + timedelta(days=1)).isoformat()}T00:00:00Z"
+    query = """query($login:String!,$from:DateTime!,$to:DateTime!){viewer{login} user(login:$login){contributionsCollection(from:$from,to:$to){contributionCalendar{totalContributions weeks{contributionDays{date contributionCount contributionLevel}}}}}}"""
+    variables = {"login": username, "from": start, "to": end}
+    result = request_json("https://api.github.com/graphql", payload={"query": query, "variables": variables})
     if not isinstance(result, dict) or result.get("errors"):
         return None
     try:
-        calendar = result["data"]["user"]["contributionsCollection"]["contributionCalendar"]
+        data = result["data"]
+        calendar = data["user"]["contributionsCollection"]["contributionCalendar"]
+        viewer = str(data.get("viewer", {}).get("login", ""))
         days = []
         levels = {"NONE": 0, "FIRST_QUARTILE": 1, "SECOND_QUARTILE": 2, "THIRD_QUARTILE": 3, "FOURTH_QUARTILE": 4}
         for week in calendar["weeks"]:
             for item in week["contributionDays"]:
                 days.append({"date": item["date"], "count": int(item["contributionCount"]), "level": levels.get(item["contributionLevel"], 0)})
-        return {"total": int(calendar["totalContributions"]), "days": days}
+        return {
+            "total": int(calendar["totalContributions"]),
+            "days": days,
+            "period": f"{year} YTD",
+            "visibility": "owner" if viewer.lower() == username.lower() else "public",
+        }
     except (KeyError, TypeError):
         return None
 
 
 def contributions_html(username: str) -> dict:
-    url = f"https://github.com/users/{username}/contributions"
+    year = date.today().year
+    url = f"https://github.com/users/{username}/contributions?from={year}-01-01&to={year}-12-31"
     request = urllib.request.Request(url, headers={"User-Agent": "aqua-launch-profile", "X-Requested-With": "XMLHttpRequest"})
     with urllib.request.urlopen(request, timeout=30) as response:
         source = response.read().decode("utf-8", errors="replace")
@@ -176,9 +188,14 @@ def contributions_html(username: str) -> dict:
         })
     if not days:
         raise RuntimeError("GitHub contribution calendar markup could not be parsed")
-    total_match = re.search(r"([\d,]+)\s+contributions?\s+in\s+the\s+last\s+year", html.unescape(source), re.I)
+    total_match = re.search(rf"([\d,]+)\s+contributions?\s+in\s+{year}", html.unescape(source), re.I)
     total = int(total_match.group(1).replace(",", "")) if total_match else sum(day["count"] for day in days)
-    return {"total": total, "days": sorted(days, key=lambda item: item["date"])}
+    return {
+        "total": total,
+        "days": sorted(days, key=lambda item: item["date"]),
+        "period": f"{year} YTD",
+        "visibility": "public",
+    }
 
 
 def demo_data() -> tuple[dict, dict]:
@@ -198,7 +215,7 @@ def demo_data() -> tuple[dict, dict]:
         "stars": 119,
         "languages": [["JavaScript", 35], ["TypeScript", 30], ["CSS", 19], ["C#", 6], ["HTML", 4]],
     }
-    return profile, {"total": 430, "days": days}
+    return profile, {"total": 430, "days": days, "period": f"{date.today().year} YTD", "visibility": "demo"}
 
 
 def trim(value: object, size: int) -> str:
@@ -341,10 +358,12 @@ def contributions_svg(cfg: dict, contribution: dict) -> str:
             title += " · stylized activity"
         nodes.append(f'<rect x="{grid_x + col * pitch}" y="{91 + row * pitch}" width="{cell}" height="{cell}" rx="2" fill="{colors[visual_level]}" class="cell {activity_class}" style="animation-delay:{delay:.3f}s"><title>{escape(title)}</title></rect>')
     css = shared_style() + """.cell{animation:cellIn .55s cubic-bezier(.32,.72,0,1) both}.real-active,.styled-active{filter:url(#cellGlow)}.styled-active{animation:cellIn .55s cubic-bezier(.32,.72,0,1) both,styledPulse 4.6s ease-in-out infinite}.ambient{animation:ambientIn .55s cubic-bezier(.32,.72,0,1) both}.ship{animation:travel 12s cubic-bezier(.65,0,.35,1) infinite}.shot-a{animation:shoot 1.7s cubic-bezier(.32,.72,0,1) infinite}.shot-b{animation:shoot 1.7s .72s cubic-bezier(.32,.72,0,1) infinite}@keyframes cellIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}@keyframes ambientIn{from{opacity:0;transform:translateY(5px)}to{opacity:.45;transform:translateY(0)}}@keyframes styledPulse{0%,100%{filter:brightness(.85)}50%{filter:brightness(1.3)}}@keyframes travel{0%,100%{transform:translateX(0)}50%{transform:translateX(715px)}}@keyframes shoot{0%{opacity:0;transform:translateY(0) scaleY(.4)}18%{opacity:1}75%,100%{opacity:0;transform:translateY(-58px) scaleY(1)}}"""
+    scope = "PUBLIC " if contribution.get("visibility") == "public" else ""
+    period = contribution.get("period", "THE LAST YEAR")
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="900" height="292" viewBox="0 0 900 292" role="img" aria-label="Stylized contribution activity with real counts for {escape(cfg['username'])}">
 <defs><linearGradient id="shell" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0b655d"/><stop offset=".58" stop-color="#0c3a3c"/><stop offset="1" stop-color="#2e518c"/></linearGradient><filter id="cellGlow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="1.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>{css}</style></defs>
 <rect width="900" height="292" rx="24" fill="{OUTER}"/><rect x="6" y="6" width="888" height="280" rx="20" fill="url(#shell)" stroke="{HAIR}"/><rect x="28" y="28" width="844" height="236" rx="18" fill="{PANEL}" stroke="#24a596"/>
-<text x="48" y="60" class="title">Contribution Activity</text><text x="49" y="79" class="label">{contribution['total']} CONTRIBUTIONS IN THE LAST YEAR</text><text x="712" y="62" class="mono">LESS</text>{''.join(f'<rect x="{750 + i * 14}" y="52" width="10" height="10" rx="2" fill="{color}"/>' for i, color in enumerate(colors))}<text x="847" y="62" text-anchor="end" class="mono">MORE</text>
+<text x="48" y="60" class="title">Contribution Activity</text><text x="49" y="79" class="label">{contribution['total']} {scope}CONTRIBUTIONS / {period}</text><text x="712" y="62" class="mono">LESS</text>{''.join(f'<rect x="{750 + i * 14}" y="52" width="10" height="10" rx="2" fill="{color}"/>' for i, color in enumerate(colors))}<text x="847" y="62" text-anchor="end" class="mono">MORE</text>
 {''.join(nodes)}
 <path d="M65 235H835" stroke="#174541" stroke-dasharray="2 7"/>
 <g class="ship"><g transform="translate(72 240)"><g class="shot-a"><rect x="12" y="-21" width="3" height="14" rx="2" fill="{MINT}"/><circle cx="13.5" cy="-24" r="3" fill="{MINT}"/></g><g class="shot-b"><rect x="12" y="-21" width="3" height="14" rx="2" fill="{BLUE}"/><circle cx="13.5" cy="-24" r="3" fill="{BLUE}"/></g><path d="M13 0L25 27l-12-6-12 6z" fill="{MINT}" stroke="#d9fff8"/><path d="M13 9L18 23H8z" fill="{BLUE}"/><path d="M5 24l-4 9 9-6M21 24l4 9-9-6" fill="none" stroke="{TEAL}" stroke-width="2"/><path d="M9 29l4 10 4-10" fill="{ORANGE}" opacity=".85"/></g></g>
@@ -353,7 +372,8 @@ def contributions_svg(cfg: dict, contribution: dict) -> str:
 
 
 def signal_svg(cfg: dict, profile: dict, contribution: dict) -> str:
-    metrics = [("STARS", profile["stars"], TEAL), ("CONTRIBUTIONS", contribution["total"], PURPLE), ("REPOSITORIES", profile["public_repos"], BLUE), ("FOLLOWERS", profile["followers"], "#32d8ef")]
+    contribution_label = "PUBLIC CONTRIBUTIONS" if contribution.get("visibility") == "public" else "CONTRIBUTIONS"
+    metrics = [("STARS", profile["stars"], TEAL), (contribution_label, contribution["total"], PURPLE), ("REPOSITORIES", profile["public_repos"], BLUE), ("FOLLOWERS", profile["followers"], "#32d8ef")]
     max_metric = max(1, max(value for _, value, _ in metrics))
     cards = []
     for index, (label, value, color) in enumerate(metrics):
