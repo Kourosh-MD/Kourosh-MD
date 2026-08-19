@@ -330,19 +330,25 @@ def contributions_svg(cfg: dict, contribution: dict) -> str:
     colors = ["#164441", "#155f57", "#16877a", "#1ab9a4", MINT]
     nodes = []
     for index, (item, col, row) in enumerate(placed):
-        level = min(4, int(item.get("level", 0)))
+        real_level = min(4, int(item.get("level", 0)))
+        style_seed = (index * 37 + col * 17 + row * 13) % 100
+        stylized = real_level == 0 and style_seed < 70
+        visual_level = real_level or (1 + (index + col + row) % 4 if stylized else 0)
         delay = ((col + row) % 18) * 0.025
-        activity_class = "active" if level else "ambient"
-        nodes.append(f'<rect x="{grid_x + col * pitch}" y="{91 + row * pitch}" width="{cell}" height="{cell}" rx="2" fill="{colors[level]}" class="cell {activity_class}" style="animation-delay:{delay:.3f}s"><title>{escape(item["date"])}: {item.get("count", 0)} contributions</title></rect>')
-    css = shared_style() + """.cell{animation:cellIn .55s cubic-bezier(.32,.72,0,1) both}.active{filter:url(#cellGlow)}.ambient{animation:cellIn .55s cubic-bezier(.32,.72,0,1) both,idlePulse 5.2s ease-in-out infinite}.ship{animation:travel 12s cubic-bezier(.65,0,.35,1) infinite}.shot-a{animation:shoot 1.7s cubic-bezier(.32,.72,0,1) infinite}.shot-b{animation:shoot 1.7s .72s cubic-bezier(.32,.72,0,1) infinite}@keyframes cellIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}@keyframes idlePulse{0%,100%{filter:brightness(.72)}50%{filter:brightness(1.28)}}@keyframes travel{0%,100%{transform:translateX(0)}50%{transform:translateX(715px)}}@keyframes shoot{0%{opacity:0;transform:translateY(0) scaleY(.4)}18%{opacity:1}75%,100%{opacity:0;transform:translateY(-58px) scaleY(1)}}"""
-    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="900" height="292" viewBox="0 0 900 292" role="img" aria-label="Contribution activity for {escape(cfg['username'])}">
+        activity_class = "real-active" if real_level else ("styled-active" if stylized else "ambient")
+        title = f'{item["date"]}: {item.get("count", 0)} real contributions'
+        if stylized:
+            title += " · stylized activity"
+        nodes.append(f'<rect x="{grid_x + col * pitch}" y="{91 + row * pitch}" width="{cell}" height="{cell}" rx="2" fill="{colors[visual_level]}" class="cell {activity_class}" style="animation-delay:{delay:.3f}s"><title>{escape(title)}</title></rect>')
+    css = shared_style() + """.cell{animation:cellIn .55s cubic-bezier(.32,.72,0,1) both}.real-active,.styled-active{filter:url(#cellGlow)}.styled-active{animation:cellIn .55s cubic-bezier(.32,.72,0,1) both,styledPulse 4.6s ease-in-out infinite}.ambient{animation:ambientIn .55s cubic-bezier(.32,.72,0,1) both}.ship{animation:travel 12s cubic-bezier(.65,0,.35,1) infinite}.shot-a{animation:shoot 1.7s cubic-bezier(.32,.72,0,1) infinite}.shot-b{animation:shoot 1.7s .72s cubic-bezier(.32,.72,0,1) infinite}@keyframes cellIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}@keyframes ambientIn{from{opacity:0;transform:translateY(5px)}to{opacity:.45;transform:translateY(0)}}@keyframes styledPulse{0%,100%{filter:brightness(.85)}50%{filter:brightness(1.3)}}@keyframes travel{0%,100%{transform:translateX(0)}50%{transform:translateX(715px)}}@keyframes shoot{0%{opacity:0;transform:translateY(0) scaleY(.4)}18%{opacity:1}75%,100%{opacity:0;transform:translateY(-58px) scaleY(1)}}"""
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="900" height="292" viewBox="0 0 900 292" role="img" aria-label="Stylized contribution activity with real counts for {escape(cfg['username'])}">
 <defs><linearGradient id="shell" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0b655d"/><stop offset=".58" stop-color="#0c3a3c"/><stop offset="1" stop-color="#2e518c"/></linearGradient><filter id="cellGlow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="1.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>{css}</style></defs>
 <rect width="900" height="292" rx="24" fill="{OUTER}"/><rect x="6" y="6" width="888" height="280" rx="20" fill="url(#shell)" stroke="{HAIR}"/><rect x="28" y="28" width="844" height="236" rx="18" fill="{PANEL}" stroke="#24a596"/>
 <text x="48" y="60" class="title">Contribution Activity</text><text x="49" y="79" class="label">{contribution['total']} CONTRIBUTIONS IN THE LAST YEAR</text><text x="712" y="62" class="mono">LESS</text>{''.join(f'<rect x="{750 + i * 14}" y="52" width="10" height="10" rx="2" fill="{color}"/>' for i, color in enumerate(colors))}<text x="847" y="62" text-anchor="end" class="mono">MORE</text>
 {''.join(nodes)}
 <path d="M65 235H835" stroke="#174541" stroke-dasharray="2 7"/>
 <g class="ship"><g transform="translate(72 240)"><g class="shot-a"><rect x="12" y="-21" width="3" height="14" rx="2" fill="{MINT}"/><circle cx="13.5" cy="-24" r="3" fill="{MINT}"/></g><g class="shot-b"><rect x="12" y="-21" width="3" height="14" rx="2" fill="{BLUE}"/><circle cx="13.5" cy="-24" r="3" fill="{BLUE}"/></g><path d="M13 0L25 27l-12-6-12 6z" fill="{MINT}" stroke="#d9fff8"/><path d="M13 9L18 23H8z" fill="{BLUE}"/><path d="M5 24l-4 9 9-6M21 24l4 9-9-6" fill="none" stroke="{TEAL}" stroke-width="2"/><path d="M9 29l4 10 4-10" fill="{ORANGE}" opacity=".85"/></g></g>
-<text x="847" y="252" text-anchor="end" class="label">LIVE COUNTS / AMBIENT ACTIVITY FIELD</text>
+<text x="847" y="252" text-anchor="end" class="label">LIVE COUNTS / 70% STYLIZED ACTIVITY FIELD</text>
 </svg>'''
 
 
