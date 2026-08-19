@@ -14,8 +14,4 @@
 
 <a href="https://github.com/Kourosh-MD"><img src="https://img.shields.io/badge/GITHUB-4387ff?style=for-the-badge&logo=github&logoColor=dcfff7&labelColor=071416" alt="GitHub" /></a>
 
-<br>
-
-<sub><strong>AQUA LAUNCH</strong> · animated profile system · powered by live GitHub data</sub>
-
 </div>
