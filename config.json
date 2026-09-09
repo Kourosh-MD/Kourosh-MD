@@ -9,8 +9,10 @@
   "resume": {
     "headline": "Junior Java Developer",
     "summary": [
-      "Computer Science student focused on Java backend development.",
-      "Building practical skills with Spring Boot, Maven, JDBC and Git.",
+      "Computer Science student at Islamic Azad University with a growing foundation in software development.",
+      "Focused on Java backend development and the Spring ecosystem.",
+      "Comfortable working with Maven, JDBC, Git and Linux-based development environments.",
+      "Also able to build and automate with Python, JavaScript, Node.js and Playwright.",
       "Ready to learn, collaborate and contribute as a junior developer."
     ],
     "education": {
@@ -18,7 +20,13 @@
       "institution": "Islamic Azad University",
       "location": "Tehran, Iran"
     },
-    "core_stack": ["Java", "Spring Boot", "Maven", "JDBC", "Git", "Python"],
+    "career_objective": [
+      "Seeking a Junior Developer role focused on Java.",
+      "Interested in backend systems and clean APIs.",
+      "Ready to learn and contribute within a team."
+    ],
+    "core_stack": ["Java", "Spring Boot", "Maven", "JDBC", "Git"],
+    "additional_skills": ["Python", "JavaScript", "Node.js", "Playwright", "Linux", "Cybersecurity", "ML/DL"],
     "languages": [
       {"name": "Persian", "level": "Native"},
       {"name": "English", "level": "Professional"}
