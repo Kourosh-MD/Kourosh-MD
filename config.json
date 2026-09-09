@@ -1,11 +1,30 @@
 {
   "username": "Kourosh-MD",
-  "name": "Kourosh",
+  "name": "Kourosh Mansouri",
   "wordmark": "KOUROSH",
-  "role": "Developer",
-  "location": "Earth",
+  "role": "Junior Java Developer",
+  "location": "Tehran, Iran",
   "status": "Coding · Learning",
   "website": "https://github.com/Kourosh-MD",
+  "resume": {
+    "headline": "Junior Java Developer",
+    "summary": [
+      "Computer Science student focused on Java backend development.",
+      "Building practical skills with Spring Boot, Maven, JDBC and Git.",
+      "Ready to learn, collaborate and contribute as a junior developer."
+    ],
+    "education": {
+      "program": "Computer Science · In Progress",
+      "institution": "Islamic Azad University",
+      "location": "Tehran, Iran"
+    },
+    "core_stack": ["Java", "Spring Boot", "Maven", "JDBC", "Git", "Python"],
+    "languages": [
+      {"name": "Persian", "level": "Native"},
+      {"name": "English", "level": "Professional"}
+    ],
+    "linkedin": "https://www.linkedin.com/in/kourosh-mansouri-a6a1291b2/"
+  },
   "portrait_ascii": "assets/portrait.txt",
   "skills": [
     "Java",

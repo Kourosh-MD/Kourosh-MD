@@ -23,6 +23,7 @@ jobs:
         run: |
           python -m pip install -r scripts/requirements.txt
           python scripts/generate.py
+          python scripts/generate_resume.py
       - name: Commit refreshed assets
         run: |
           if git diff --quiet -- assets; then exit 0; fi
