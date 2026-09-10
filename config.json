@@ -2,18 +2,18 @@
   "username": "Kourosh-MD",
   "name": "Kourosh Mansouri",
   "wordmark": "KOUROSH",
-  "role": "Junior Java Developer",
+  "role": "Junior Full-Stack Developer",
   "location": "Tehran, Iran",
   "status": "Coding · Learning",
   "website": "https://github.com/Kourosh-MD",
   "resume": {
-    "headline": "Junior Java Developer",
+    "headline": "Junior Full-Stack Developer",
     "summary": [
-      "Computer Engineering student focused on learning Java backend development.",
-      "Building skills with Java, Spring Boot, Maven, JDBC and PostgreSQL through personal projects.",
+      "Computer Engineering student focused on becoming a full-stack developer.",
+      "Building backend and frontend skills with Java, Spring Boot, PostgreSQL, JavaScript and Next.js.",
       "1.5 years in a technical environment, following software and infrastructure project workflows.",
       "Handled website work, Linux, VPN setup, automation, networking and software troubleshooting.",
-      "Seeking a first professional opportunity as a Junior Java Developer."
+      "Seeking a first professional opportunity as a Junior Full-Stack Developer."
     ],
     "education": {
       "program": "Computer Engineering · In Progress",
@@ -21,12 +21,12 @@
       "location": "Tehran, Iran"
     },
     "career_objective": [
-      "Seeking my first Junior Java Developer role.",
-      "Interested in backend systems and clean APIs.",
+      "Seeking my first Junior Full-Stack Developer role.",
+      "Interested in complete web applications and clean APIs.",
       "Ready to learn and contribute within a team."
     ],
-    "core_stack": ["Java", "Spring Boot", "Maven", "JDBC", "PostgreSQL"],
-    "additional_skills": ["Python", "JavaScript", "Node.js", "Playwright", "Git", "Linux", "Cybersecurity", "ML/DL", "Prompt Eng.", "Dify AI"],
+    "core_stack": ["Java", "Spring Boot", "PostgreSQL", "JavaScript", "Next.js"],
+    "additional_skills": ["Python", "Node.js", "Playwright", "Maven", "JDBC", "Git", "Linux", "Cybersecurity", "ML/DL", "Prompt Eng.", "Dify AI"],
     "languages": [
       {"name": "Persian", "level": "Native"},
       {"name": "English", "level": "Professional"}

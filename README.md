@@ -4,7 +4,7 @@
 
 <br><br>
 
-<img src="./assets/resume.svg" width="900" alt="Animated resume for Kourosh Mansouri, Junior Java Developer" />
+<img src="./assets/resume.svg" width="900" alt="Animated resume for Kourosh Mansouri, Junior Full-Stack Developer" />
 
 <br>
 
