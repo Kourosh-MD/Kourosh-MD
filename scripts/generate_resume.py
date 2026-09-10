@@ -39,7 +39,7 @@ def generate(config: dict) -> str:
     github = str(config.get("website", "https://github.com/Kourosh-MD")).replace("https://", "").rstrip("/")
     linkedin = str(resume.get("linkedin", "")).replace("https://www.", "").replace("https://", "").rstrip("/")
     stack = list(resume.get("core_stack", []))[:5]
-    additional = list(resume.get("additional_skills", []))[:8]
+    additional = list(resume.get("additional_skills", []))[:10]
     languages = list(resume.get("languages", []))[:3]
     colors = [TEAL, BLUE, PURPLE, YELLOW, GREEN, ORANGE]
 
@@ -59,10 +59,10 @@ def generate(config: dict) -> str:
         for index, line in enumerate(objective)
     )
     additional_nodes = "".join(
-        f'<g class="skill skill-{index}" transform="translate({66 + (index % 3) * 154} {807 + (index // 3) * 42})">'
-        f'<rect width="138" height="30" rx="15" fill="#0d3636" stroke="#238f83"/>'
-        f'<circle cx="18" cy="15" r="4" fill="{colors[index % len(colors)]}"/>'
-        f'<text x="31" y="19" class="skill-text">{clean(skill, 16)}</text></g>'
+        f'<g class="skill skill-{index}" transform="translate({66 + (index % 4) * 119} {807 + (index // 4) * 42})">'
+        f'<rect width="108" height="30" rx="15" fill="#0d3636" stroke="#238f83"/>'
+        f'<circle cx="16" cy="15" r="4" fill="{colors[index % len(colors)]}"/>'
+        f'<text x="28" y="19" class="skill-text">{clean(skill, 13)}</text></g>'
         for index, skill in enumerate(additional)
     )
     language_nodes = "".join(
@@ -92,7 +92,7 @@ def generate(config: dict) -> str:
 .cursor{animation:blink 1s step-end infinite}.scan{animation:scan 5.5s linear infinite}
 .skill{opacity:0;animation:chipIn .45s cubic-bezier(.32,.72,0,1) forwards}
 .skill-0{animation-delay:.55s}.skill-1{animation-delay:.65s}.skill-2{animation-delay:.75s}
-.skill-3{animation-delay:.85s}.skill-4{animation-delay:.95s}.skill-5{animation-delay:1.05s}.skill-6{animation-delay:1.15s}.skill-7{animation-delay:1.25s}
+.skill-3{animation-delay:.85s}.skill-4{animation-delay:.95s}.skill-5{animation-delay:1.05s}.skill-6{animation-delay:1.15s}.skill-7{animation-delay:1.25s}.skill-8{animation-delay:1.35s}.skill-9{animation-delay:1.45s}
 .language-bar{transform-origin:left;animation:grow .9s .85s cubic-bezier(.32,.72,0,1) both}
 .language-row{opacity:0;animation:fadeIn .6s forwards}.row-0{animation-delay:.7s}.row-1{animation-delay:.9s}
 @keyframes panelIn{from{opacity:0;transform:translateY(13px)}to{opacity:1;transform:translateY(0)}}
@@ -119,7 +119,7 @@ def generate(config: dict) -> str:
 <text x="46" y="115" class="headline">{clean(str(resume.get('headline', config.get('role', 'Developer'))).upper())} · {clean(str(config.get('location', 'Tehran, Iran')).upper())}</text>
 <path d="M44 128H856" stroke="#1b5d58"/><circle cx="844" cy="91" r="14" fill="#0d3636" stroke="{TEAL}"/><path d="M838 91l4 4 8-9" fill="none" stroke="{MINT}" stroke-width="2"/>
 <g class="panel panel-1"><rect x="44" y="147" width="812" height="190" rx="18" fill="{PANEL}" stroke="#1c8277"/><text x="66" y="176" class="section">About Me</text><text x="832" y="176" text-anchor="end" class="label">PROFILE.SUMMARY</text>{summary_nodes}</g>
-<g class="panel panel-2"><rect x="44" y="355" width="390" height="210" rx="18" fill="{PANEL}" stroke="#1c8277"/><text x="66" y="388" class="section">Education</text><text x="408" y="388" text-anchor="end" class="label">ACTIVE</text><circle cx="73" cy="428" r="7" fill="{MINT}"/><path d="M73 435V522" stroke="#26786f" stroke-width="2"/><text x="96" y="432" class="education-main">{clean(education.get('program', 'Computer Science'), 43)}</text><text x="96" y="466" class="education-sub">{clean(education.get('institution', 'Islamic Azad University'), 46)}</text><text x="96" y="493" class="education-sub">{clean(education.get('location', config.get('location', '')), 46)}</text><text x="96" y="530" class="label">CURRENTLY STUDYING</text></g>
+<g class="panel panel-2"><rect x="44" y="355" width="390" height="210" rx="18" fill="{PANEL}" stroke="#1c8277"/><text x="66" y="388" class="section">Education</text><text x="408" y="388" text-anchor="end" class="label">ACTIVE</text><circle cx="73" cy="428" r="7" fill="{MINT}"/><path d="M73 435V522" stroke="#26786f" stroke-width="2"/><text x="96" y="432" class="education-main">{clean(education.get('program', 'Computer Engineering'), 43)}</text><text x="96" y="466" class="education-sub">{clean(education.get('institution', 'Islamic Azad University'), 46)}</text><text x="96" y="493" class="education-sub">{clean(education.get('location', config.get('location', '')), 46)}</text><text x="96" y="530" class="label">CURRENTLY STUDYING</text></g>
 <g class="panel panel-3"><rect x="452" y="355" width="404" height="210" rx="18" fill="{PANEL}" stroke="#1c8277"/><text x="476" y="388" class="section">Career Objective</text><text x="832" y="388" text-anchor="end" class="label">TARGET.ROLE</text>{objective_nodes}<text x="476" y="493" class="label">PROFILE LINKS</text><text x="476" y="520" class="link">{clean(github, 51)}</text><text x="476" y="546" class="link">{clean(linkedin, 51)}</text></g>
 <g class="panel panel-4"><rect x="44" y="583" width="812" height="145" rx="18" fill="{PANEL}" stroke="#1c8277"/><text x="66" y="616" class="section">Java Backend Toolkit</text><text x="832" y="616" text-anchor="end" class="label">PRIMARY FOCUS</text>{stack_nodes}</g>
 <g class="panel panel-5"><rect x="44" y="746" width="510" height="181" rx="18" fill="{PANEL}" stroke="#1c8277"/><text x="66" y="779" class="section">Additional Skills &amp; Tools</text><text x="526" y="779" text-anchor="end" class="label">EXTENDED STACK</text>{additional_nodes}</g>

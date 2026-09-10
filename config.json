@@ -9,24 +9,24 @@
   "resume": {
     "headline": "Junior Java Developer",
     "summary": [
-      "Computer Science student at Islamic Azad University with a growing foundation in software development.",
-      "Focused on Java backend development and the Spring ecosystem.",
-      "Comfortable working with Maven, JDBC, Git and Linux-based development environments.",
-      "Also able to build and automate with Python, JavaScript, Node.js and Playwright.",
-      "Ready to learn, collaborate and contribute as a junior developer."
+      "Computer Engineering student focused on learning Java backend development.",
+      "Building skills with Java, Spring Boot, Maven, JDBC and PostgreSQL through personal projects.",
+      "1.5 years in a technical environment, following software and infrastructure project workflows.",
+      "Handled website work, Linux, VPN setup, automation, networking and software troubleshooting.",
+      "Seeking a first professional opportunity as a Junior Java Developer."
     ],
     "education": {
-      "program": "Computer Science · In Progress",
+      "program": "Computer Engineering · In Progress",
       "institution": "Islamic Azad University",
       "location": "Tehran, Iran"
     },
     "career_objective": [
-      "Seeking a Junior Developer role focused on Java.",
+      "Seeking my first Junior Java Developer role.",
       "Interested in backend systems and clean APIs.",
       "Ready to learn and contribute within a team."
     ],
-    "core_stack": ["Java", "Spring Boot", "Maven", "JDBC", "Git"],
-    "additional_skills": ["Python", "JavaScript", "Node.js", "Playwright", "Linux", "Cybersecurity", "ML/DL"],
+    "core_stack": ["Java", "Spring Boot", "Maven", "JDBC", "PostgreSQL"],
+    "additional_skills": ["Python", "JavaScript", "Node.js", "Playwright", "Git", "Linux", "Cybersecurity", "ML/DL", "Prompt Eng.", "Dify AI"],
     "languages": [
       {"name": "Persian", "level": "Native"},
       {"name": "English", "level": "Professional"}
