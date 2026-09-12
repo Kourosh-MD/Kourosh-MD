@@ -11,9 +11,9 @@
     "summary": [
       "Computer Engineering student focused on Java backend development and the Spring ecosystem.",
       "Strengthening Java backend skills with Spring Boot, REST APIs, JDBC and PostgreSQL.",
-      "1.5 years in a technical environment, following software and infrastructure project workflows.",
-      "Handled website work, Linux, VPN setup, automation, networking and software troubleshooting.",
-      "Seeking a first professional opportunity as a Junior Java Developer."
+      "1.5 years of technical work with database CRUD, data operations and automated data ingestion.",
+      "Built AI agents for data transformation, token management and service lifecycle coordination.",
+      "Strong in AI-assisted execution, prompt engineering and efficient token management."
     ],
     "education": {
       "program": "Computer Engineering · In Progress",
@@ -26,7 +26,7 @@
       "Long-term goal: grow into a Full-Stack Developer."
     ],
     "core_stack": ["Java", "Spring Boot", "Maven", "JDBC", "PostgreSQL"],
-    "additional_skills": ["Python", "JavaScript", "Next.js", "Node.js", "Playwright", "Git", "Linux", "Cybersecurity", "ML/DL", "Prompt Eng.", "Dify AI"],
+    "additional_skills": ["AI Workflows", "Prompt Eng.", "Token Mgmt", "AI Agents", "Dify AI", "Agent Ops", "Data ETL", "Automation", "Python", "Playwright", "Service Mgmt"],
     "languages": [
       {"name": "Persian", "level": "Native"},
       {"name": "English", "level": "Professional"}
